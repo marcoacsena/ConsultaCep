@@ -3,6 +3,7 @@ package com.example.consultacep.activity;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,6 +15,12 @@ import com.example.consultacep.api.RetrofitClientInstance;
 import com.example.consultacep.model.Cep;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,7 +30,10 @@ public class MainActivity extends AppCompatActivity {
     private TextInputEditText cep;
     private Button btnBucarCep;
     private TextView tvResultado;
-    
+
+    public MainActivity() throws MalformedURLException {
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+
+
     private void obterCep(String cepDigitado) {
 
         CepApi cepApi = RetrofitClientInstance.getRetrofitInstance().create(CepApi.class);
@@ -56,7 +68,12 @@ public class MainActivity extends AppCompatActivity {
 
                     Cep cep = response.body();
 
-                    tvResultado.setText("O bairro é: " +cep.getBairro());
+                    tvResultado.setText("Informações do Cep Digitado: \n"
+                                        + "- "  +cep.getLogradouro() +"\n"
+                                        + "- Bairro: " +cep.getBairro() +"\n"
+                                        + "- UF.: " +cep.getuF() +"\n"
+
+                                        );
                 }
             }
 
